@@ -1,6 +1,5 @@
 import Capitals from "./Capitals.js";
 import CITY from "./City.js";
-import { translations, getUserLanguage } from "../../lang/translation.js";
 import config from "./../../config/config.js";
 
 // focus the search input as the DOM loads
@@ -8,7 +7,6 @@ window.onload = function () {
   document.getElementsByName("search-bar")[0].focus();
 };
 
-const userLang = getUserLanguage() || "en-US";
 const place = document.querySelector("#place");
 
 for (let i in CITY) {
@@ -19,7 +17,7 @@ for (let i in CITY) {
 }
 
 function formatAMPM(date) {
-  return date.toLocaleString(translations[userLang].formattingLocale, {
+  return date.toLocaleString("en-US", {
     hour: '2-digit',
     minute: '2-digit'
   });
@@ -52,10 +50,9 @@ const fetchAirQuality = async (city) => {
 
 const updateAirQuality = (aqi) => {
   const airQualityElement = document.querySelector("#AirQuality");
-  const aqiText = translations[userLang].airQuality;
-  airQualityElement.innerText = `${aqiText}: ${aqi}`;
+  airQualityElement.innerText = `Air Quality: ${aqi}`;
 
-  const airQuality = getAirQualityDescription(aqi, userLang);
+  const airQuality = getAirQualityDescription(aqi);
   const textClass = getAirQualityClass(aqi);
   const qualityDescriptionElement =
     document.querySelector(".air-quality-label");
@@ -64,22 +61,22 @@ const updateAirQuality = (aqi) => {
   qualityDescriptionElement.classList = "air-quality-label ml-0 " + textClass;
 };
 
-const getAirQualityDescription = (aqi, userLang) => {
+const getAirQualityDescription = (aqi) => {
   switch (true) {
     case aqi >= 0 && aqi <= 50:
-      return `${translations[userLang].good}`;
+      return "Good";
     case aqi > 50 && aqi <= 100:
-      return `${translations[userLang].satisfactory}`;
+      return "Satisfactory";
     case aqi > 100 && aqi <= 150:
-      return `${translations[userLang].sensitive}`;
+      return "Sensitive";
     case aqi > 150 && aqi <= 200:
-      return `${translations[userLang].unhealthy}`;
+      return "Unhealthy";
     case aqi > 200 && aqi <= 300:
-      return `${translations[userLang].veryUnhealthy}`;
+      return "Very Unhealthy";
     case aqi > 300:
-      return `${translations[userLang].hazardous}`;
+      return "Hazardous";
     default:
-      return `${translations[userLang].notAvailable}`;
+      return "Not Available";
   }
 };
 
@@ -121,17 +118,17 @@ let weather = {
         city +
         "&units=metric&appid=" +
         config.API_KEY +
-        `&lang=${translations[userLang].apiLang}`
+        `&lang=en`
     )
       .then((response) => {
         if (!response.ok) {
-          toastFunction(`${translations[userLang].noWeatherFound}`);
+          toastFunction("No weather found.");
           document.getElementById("city").innerHTML = "City not Found";
           document.getElementById("temp").style.display = "none";
           document.querySelector(
             ".weather-component__data-wrapper"
           ).style.display = "none";
-          throw new Error(`${translations[userLang].noWeatherFound}`);
+          throw new Error("No weather found.");
         }
         return response.json();
       })
@@ -156,10 +153,10 @@ let weather = {
     AirQuality(city);
 
     document.getElementById("dynamic").innerText =
-      `${translations[userLang].weatherIn} ` + name;
+      `Weather in ` + name;
 
     document.getElementById("city").innerText =
-      `${translations[userLang].weatherIn} ` + name;
+      `Weather in ` + name;
 
     document.getElementById(
       "icon"
@@ -180,21 +177,17 @@ let weather = {
 
     document.getElementById(
       "humidity"
-    ).innerText = `${translations[userLang].humidity}: ${humidity}%`;
+    ).innerText = `Humidity: ${humidity}%`;
 
     document.getElementById(
       "wind"
-    ).innerText = `${translations[userLang].windSpeed}: ${speed}km/h`;
+    ).innerText = `Wind speed: ${speed}km/h`;
 
     document.getElementById("weather").classList.remove("loading");
 
-    document.getElementById("sunrise").innerText = `${
-      translations[userLang].sunrise
-    }: ${formatAMPM(date1)}`;
+    document.getElementById("sunrise").innerText = `Sunrise: ${formatAMPM(date1)}`;
 
-    document.getElementById("sunset").innerText = `${
-      translations[userLang].sunset
-    }: ${formatAMPM(date2)}`;
+    document.getElementById("sunset").innerText = `Sunset: ${formatAMPM(date2)}`;
 
     let url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${config.API_KEY}`;
     getWeatherWeekly(url);
@@ -219,7 +212,7 @@ let weather = {
           console.error(error);
         });
     } else {
-      toastFunction(translations[userLang].pleaseAddLocation);
+      toastFunction("Please add a location.");
     }
   },
 };
@@ -278,9 +271,9 @@ function generateWeatherItem(
   if (!isCelcius) {
     dayTemperature = dayTemperature * (9 / 5) + 35;
     dayTemperature = (Math.round(dayTemperature * 100) / 100).toFixed(2);
-    dayTemp.innerHTML = `${translations[userLang].day} ${dayTemperature}&#176;F`;
+    dayTemp.innerHTML = `Day ${dayTemperature}&#176;F`;
   } else {
-    dayTemp.innerHTML = `${translations[userLang].day} ${dayTemperature}&#176;C`;
+    dayTemp.innerHTML = `Day ${dayTemperature}&#176;C`;
   }
   dayTemp.style.fontFamily = "Inter";
   dayTemp.style.fontWeight = "bolder";
@@ -290,9 +283,9 @@ function generateWeatherItem(
   if (!isCelcius) {
     nightTemperature = nightTemperature * (9 / 5) + 35;
     nightTemperature = (Math.round(nightTemperature * 100) / 100).toFixed(2);
-    nightTemp.innerHTML = `${translations[userLang].night} ${nightTemperature}&#176;F`;
+    nightTemp.innerHTML = `Night ${nightTemperature}&#176;F`;
   } else {
-    nightTemp.innerHTML = `${translations[userLang].night} ${nightTemperature}&#176;C`;
+    nightTemp.innerHTML = `Night ${nightTemperature}&#176;C`;
   }
   nightTemp.style.color = "#00dcff";
   nightTemp.style.fontFamily = "Inter";
@@ -318,7 +311,7 @@ function showWeatherData(dailyArray) {
     let dayString = item.day;
     let dateString = item.date;
     let element = generateWeatherItem(
-      translations[userLang][dayString.toLowerCase()],
+      dayString,
       item.weather[0].icon,
       item.main.temp_min,
       item.main.temp_max
@@ -361,7 +354,7 @@ fetch("https://ipapi.co/json/")
   });
 
 document.getElementsByName("search-bar")[0].placeholder =
-  translations[userLang].search;
+  "Search";
 
 // SHOWS CURRENT DAY IN THE RENDERED DAYS
 function showCurrDay(dayString, dateString, element) {
@@ -485,8 +478,6 @@ if ("SpeechRecognition" in window || "webkitSpeechRecognition" in window) {
     // Set the value of the search bar to the recognized speech
     searchBar.value = transcript;
 
-    // Optionally, you can submit the form to perform the search
-    // searchBar.form.submit();
   };
 
   // Handle speech recognition errors

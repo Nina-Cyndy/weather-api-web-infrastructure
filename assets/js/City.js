@@ -1,5 +1,3 @@
-// added few more cities either than india 
-
 var CITY = [
   "Adilabad",
   "Agra",
