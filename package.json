@@ -2,27 +2,21 @@
   "name": "weather-app",
   "version": "1.0.0",
   "description": "<br>",
-  "main": "index.js",
+  "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Prakash-Ravichandran/weather-app.git"
+    "url": "git+https://github.com/Nina-Cyndy/weather-api-web-infrastructure.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Prakash-Ravichandran/weather-app/issues"
+    "url": "https://github.com/Nina-Cyndy/weather-api-web-infrastructure/issues"
   },
-  "homepage": "https://github.com/Prakash-Ravichandran/weather-app#readme",
-  "devDependencies": {
-    "gulp-cli": "^2.3.0"
-  },
+  "homepage": "https://github.com/Nina-Cyndy/weather-api-web-infrastructure#readme",
   "dependencies": {
-    "browser-sync": "^2.29.3",
-    "gulp": "^4.0.2",
-    "gulp-sass": "^5.1.0",
-    "sass": "^1.69.3"
+    "browser-sync": "^2.29.3"
   }
 }
