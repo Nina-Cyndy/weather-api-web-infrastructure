@@ -149,6 +149,22 @@ input.weather-component__search-bar {
   border-radius: 30px;
   caret-color: black;
 }
+.demo {
+  color: aqua;
+}
+.demo2 {
+  color: aquamarine;
+}
+
+.demo3 {
+  width: 40px;
+  height: 55px;
+}
+
+.demo4 {
+  color: yellow;
+  font-family: "Courier New", Courier, monospace;
+}
 
 .weather-component__search {
   display: flex;
@@ -156,9 +172,9 @@ input.weather-component__search-bar {
   /* border-radius: 30px; */
 }
 
-.weather-component__search-bar {
-  /* border-radius: 30px; */
-}
+/* .weather-component__search-bar {
+   border-radius: 30px;
+} */
 
 option:hover,
 .active {
@@ -452,18 +468,6 @@ button:focus {
   visibility: visible;
   transform: translateY(0); /* Slide in from the top */
 }
-
-footer {
-  height: 300px;
-  display: flex;
-  position: relative;
-  top: 240px;
-  justify-content: center;
-  align-items: center;
-  text-decoration-color: white;
-  text-emphasis-style: bold;
-}
-
 /* .col-auto {
   margin: 10px 20px;
 }  */
@@ -550,13 +554,6 @@ footer {
   background: #171717;
 }
 
-/* --End Of Scroll Bar-- */
-.footerSection {
-  margin-top: 20px;
-  margin-bottom: 0;
-}
-/* Responsive */
-
 @media only screen and (min-width: 1200px) {
   .forecast-component__items-wrapper {
     grid-template-columns: auto auto auto auto;
@@ -592,9 +589,9 @@ footer {
   .nav-component {
     height: fit-content;
   }
-  .whatsapp img {
-    /* margin-top: 20px; */
-  }
+  /* .whatsapp img {
+     margin-top: 20px; 
+  } */
   .weather-component__card {
     padding: 7px;
     height: 460px;
@@ -702,21 +699,38 @@ footer {
   color: #ffffff;
 }
 
+/* Footer */
+footer {
+  background-color: #000000d0;
+  height: 150px;
+  display: flex;
+  position: relative;
+  top: 350px;
+  justify-content: center;
+  align-items: center;
+  text-emphasis-style: bold;
+}
 .textfooter {
   color: white;
   text-align: center;
-  font-size: x-large;
+  font-size: 1rem;
   z-index: auto;
 }
-
-footer {
-  background-color: #000000d0;
-  margin-top: 55px;
-  height: 150px;
+.footerSection {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
-
-.footer-component {
-  width: 100%;
+.footer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: white;
+  display: inline-flex;
+  gap: 2rem;
 }
 
 /* current day in future weather forecast*/
@@ -788,9 +802,6 @@ html body #scroll-btn {
 }
 
 @media only screen and (max-width: 550px) {
-  .footer-component__social-media {
-    width: 100%;
-  }
 
   .link {
     width: 45%;
@@ -810,6 +821,7 @@ html body #scroll-btn {
 }
 
 #background {
+  background: linear-gradient(112.1deg, #202639 11.4%, #3f4c77 70.2%);
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
@@ -820,7 +832,6 @@ html body #scroll-btn {
   position: fixed;
   top: 0;
   left: 0;
-  filter: blur(3px);
   z-index: -1;
 }
 

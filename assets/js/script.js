@@ -6,14 +6,7 @@ import config from "./../../config/config.js";
 // focus the search input as the DOM loads
 window.onload = function () {
   document.getElementsByName("search-bar")[0].focus();
-
-  // fetch background
-  fetchNewBackground();
 };
-
-function changeBackgroundImage() {
-  fetchNewBackground();
-}
 
 const userLang = getUserLanguage() || "en-US";
 const place = document.querySelector("#place");
@@ -45,20 +38,16 @@ const AirQuality = (city) => {
     .catch((error) => console.error(error));
 };
 
-const fetchAirQuality = (city) => {
+const fetchAirQuality = async (city) => {
   const url = `https://api.waqi.info/v2/search/?token=${config.AIR_KEY}&keyword=${city}`;
 
-  return fetch(url)
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`Failed to fetch air quality data for ${city}`);
-      }
-      return res.json();
-    })
-    .then((data) => {
-      const relevantLocation = data.data[0];
-      return relevantLocation.aqi;
-    });
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch air quality data for ${city}`);
+  }
+  const data = await res.json();
+  const relevantLocation = data.data[0];
+  return relevantLocation.aqi;
 };
 
 const updateAirQuality = (aqi) => {
@@ -166,10 +155,6 @@ let weather = {
     const { lat, lon } = data.coord;
     AirQuality(city);
 
-    document
-      .getElementById("icon")
-      .addEventListener("click", changeBackgroundImage);
-
     document.getElementById("dynamic").innerText =
       `${translations[userLang].weatherIn} ` + name;
 
@@ -211,29 +196,8 @@ let weather = {
       translations[userLang].sunset
     }: ${formatAMPM(date2)}`;
 
-    let url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=metric&appid=${config.API_KEY}`;
+    let url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${config.API_KEY}`;
     getWeatherWeekly(url);
-    document
-      .getElementById("whatsapp-button")
-      .replaceWith(document.getElementById("whatsapp-button").cloneNode(true));
-    document
-      .getElementById("whatsapp-button")
-      .addEventListener("click", function () {
-        const message = `Weather in ${name} today
-      Temperature: ${temperature},
-      Humidity: ${humidity}%,
-      Wind Speed: ${speed}km/hr,
-      Sunrise: ${formatAMPM(date1)},
-      Sunset: ${formatAMPM(date2)}.`;
-        // console.log(message)
-
-        // Create the WhatsApp share URL
-        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
-          message
-        )}`;
-        // Open WhatsApp in a new tab to share the message
-        window.open(whatsappUrl, "_blank");
-      });
   },
   search: function () {
     if (document.querySelector(".weather-component__search-bar").value != "") {
@@ -251,17 +215,9 @@ let weather = {
         },
       })
         .then((response) => response.json())
-        .then((data) => {
-          const randomIndex = Math.floor(Math.random() * 10);
-          const url = data.photos[randomIndex].src.large2x;
-          document.getElementById(
-            "background"
-          ).style.backgroundImage = `url(${url})`;
-        })
         .catch((error) => {
           console.error(error);
         });
-      //url = "";
     } else {
       toastFunction(translations[userLang].pleaseAddLocation);
     }
@@ -272,7 +228,25 @@ async function getWeatherWeekly(url) {
   fetch(url)
     .then((res) => res.json())
     .then((data) => {
-      showWeatherData(data);
+      // Extract one forecast per day (e.g., the one at 12:00)
+      const dailyMap = {};
+      data.list.forEach((item) => {
+        const date = new Date(item.dt * 1000);
+        const day = date.toLocaleDateString("en-US", { weekday: "long" });
+        const hour = date.getHours();
+        // Pick the forecast closest to 12:00 for each day
+        if (!dailyMap[day] || Math.abs(hour - 12) < Math.abs(dailyMap[day].hour - 12)) {
+          dailyMap[day] = {
+            ...item,
+            hour: hour,
+            day: day,
+            date: date.getDate()
+          };
+        }
+      });
+      // Convert map to array and keep only the next 5 days
+      const dailyArray = Object.values(dailyMap).slice(0, 5);
+      showWeatherData(dailyArray);
     });
 }
 
@@ -333,17 +307,21 @@ function generateWeatherItem(
   return container;
 }
 
-function showWeatherData(data) {
+function showWeatherData(dailyArray) {
   let container = document.getElementById("weather-forecast");
   container.innerHTML = "";
-  data.daily.forEach((day, idx) => {
-    let dayString = window.moment(day.dt * 1000).format("dddd");
-    let dateString = window.moment(day.dt * 1000).format("Do");
+  if (!dailyArray || !Array.isArray(dailyArray) || dailyArray.length === 0) {
+    container.innerHTML = "<div class='text-danger'>No forecast data available.</div>";
+    return;
+  }
+  dailyArray.forEach((item) => {
+    let dayString = item.day;
+    let dateString = item.date;
     let element = generateWeatherItem(
       translations[userLang][dayString.toLowerCase()],
-      day.weather[0].icon,
-      day.temp.night,
-      day.temp.day
+      item.weather[0].icon,
+      item.main.temp_min,
+      item.main.temp_max
     );
     showCurrDay(dayString, parseInt(dateString), element);
     container.appendChild(element);
