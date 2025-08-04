@@ -4,12 +4,24 @@
     {
       "src": "*.html",
       "use": "@vercel/static"
-    }
+    },
+    { "src": "assets/**", "use": "@vercel/static" },
+    { "src": "config/**", "use": "@vercel/static" }
   ],
   "routes": [
+    { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/config/(.*)", "dest": "/config/$1" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ],
+  "headers": [
     {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/assets/css/(.*)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/css"
+        }
+      ]
     }
   ]
 }
