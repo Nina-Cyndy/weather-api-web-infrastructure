@@ -1,21 +1,18 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "*.html",
-      "use": "@vercel/static"
-    },
+    { "src": "*.html", "use": "@vercel/static" },
     { "src": "assets/**", "use": "@vercel/static" },
     { "src": "config/**", "use": "@vercel/static" }
   ],
-  "routes": [
-    { "src": "/assets/(.*)", "dest": "/assets/$1" },
-    { "src": "/config/(.*)", "dest": "/config/$1" },
-    { "src": "/(.*)", "dest": "/$1" }
+  "rewrites": [
+    { "source": "/assets/:path*", "destination": "/assets/:path*" },
+    { "source": "/config/:path*", "destination": "/config/:path*" },
+    { "source": "/:path*", "destination": "/:path*" }
   ],
   "headers": [
     {
-      "source": "/assets/css/(.*)",
+      "source": "/assets/css/:path*",
       "headers": [
         {
           "key": "Content-Type",
