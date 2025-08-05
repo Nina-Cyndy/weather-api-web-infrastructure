@@ -5,6 +5,7 @@ This Weather App is a modern, responsive web application that provides real-time
 
 ## Live Demo
 Visit the live application: [Weather App](https://weather-api-web-infrastructure.vercel.app/)
+Check for the live demo: [Live Demo](https://youtu.be/siSnFiLC7Ig?si=dbLu3xUglT0sXeZn)
 
 ## Features
 - **Location-based Weather Data**: Search for any city worldwide
@@ -62,7 +63,7 @@ weather-api-web-infrastructure/
    Register at OpenWeatherMap to get API keys
    Use the encode utility to encode your keys
    Copy the encoded keys to keyManager.js
-3. Start the live server of index.hmtl
+3. Start the live server of index.html
 
 #### Security Features
 - API key protection through encoding/decoding mechanism
