@@ -4,7 +4,7 @@
 This Weather App is a modern, responsive web application that provides real-time weather information and forecasts. Built with vanilla JavaScript, HTML5, and CSS3, it offers a clean, intuitive interface for users to search locations and view detailed weather data including temperature, humidity, wind speed, air quality, sunrise/sunset times, and 5-day forecasts.
 
 ## Live Demo
-Visit the live application: [Weather App](https://weather-app-v1-six.vercel.app/)
+Visit the live application: [Weather App](https://weather-api-web-infrastructure.vercel.app/)
 
 ## Features
 - **Location-based Weather Data**: Search for any city worldwide
@@ -56,7 +56,7 @@ weather-api-web-infrastructure/
 ### Local Development
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/weather-api-web-infrastructure.git
+   git clone https://github.com/Nina-Cyndy/weather-api-web-infrastructure.git
    cd weather-api-web-infrastructure
 2. Set up the API keys:
    Register at OpenWeatherMap to get API keys
